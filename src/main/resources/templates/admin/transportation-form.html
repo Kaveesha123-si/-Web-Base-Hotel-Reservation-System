@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transportation Form - SAM Hotel</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .sidebar {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .sidebar .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin: 0.25rem 0;
+        }
+        
+        .sidebar .nav-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        
+        .sidebar .nav-link.active {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+        
+        .btn-gold {
+            background: linear-gradient(45deg, #d4af37, #f4d03f);
+            border: none;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .btn-gold:hover {
+            background: linear-gradient(45deg, #b8941f, #d4af37);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 sidebar p-0">
+                <div class="p-3">
+                    <h4 class="text-white mb-4">
+                        <i class="fas fa-hotel me-2"></i>SAM Hotel
+                    </h4>
+                    <h6 class="text-white-50 mb-3">Admin Panel</h6>
+                </div>
+                
+                <nav class="nav flex-column px-3">
+                    <a class="nav-link" href="/admin/dashboard">
+                        <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                    </a>
+                    <a class="nav-link" href="/admin/packages">
+                        <i class="fas fa-box me-2"></i>Packages
+                    </a>
+                    <a class="nav-link" href="/admin/rooms">
+                        <i class="fas fa-bed me-2"></i>Rooms
+                    </a>
+                    <a class="nav-link" href="/admin/itineraries">
+                        <i class="fas fa-map-marked-alt me-2"></i>Activities
+                    </a>
+                    <a class="nav-link active" href="/admin/transportations">
+                        <i class="fas fa-car me-2"></i>Transportation
+                    </a>
+                    <a class="nav-link" href="/admin/offers">
+                        <i class="fas fa-percentage me-2"></i>Offers
+                    </a>
+                    <a class="nav-link" href="/admin/faqs">
+                        <i class="fas fa-question-circle me-2"></i>FAQs
+                    </a>
+                    <hr class="text-white-50">
+                    <a class="nav-link" href="/">
+                        <i class="fas fa-home me-2"></i>View Website
+                    </a>
+                    <a class="nav-link" href="/logout">
+                        <i class="fas fa-sign-out-alt me-2"></i>Logout
+                    </a>
+                </nav>
+            </div>
+            
+            <!-- Main Content -->
+            <div class="col-md-9 col-lg-10 p-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 th:text="${transportation.id != null ? 'Edit Transportation' : 'Add New Transportation'}">Transportation Form</h2>
+                    <a href="/admin/transportations" class="btn btn-outline-secondary">
+                        <i class="fas fa-arrow-left me-2"></i>Back to Transportation
+                    </a>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-body">
+                                <form th:action="@{/admin/transportations}" th:object="${transportation}" method="post">
+                                    <input type="hidden" th:field="*{id}">
+                                    <div class="mb-3">
+                                        <label for="serviceName" class="form-label">Service Name</label>
+                                        <input type="text" class="form-control" id="serviceName" th:field="*{serviceName}" required>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="description" class="form-label">Description</label>
+                                        <textarea class="form-control" id="description" th:field="*{description}" rows="3" required></textarea>
+                                    </div>
+                                    
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="type" class="form-label">Transportation Type</label>
+                                                <select class="form-select" id="type" th:field="*{type}" required>
+                                                    <option value="AIRPORT_PICKUP">Airport Pickup</option>
+                                                    <option value="AIRPORT_DROPOFF">Airport Drop-off</option>
+                                                    <option value="CITY_TOUR">City Tour</option>
+                                                    <option value="INTERCITY">Intercity Travel</option>
+                                                    <option value="RENTAL_CAR">Car Rental</option>
+                                                    <option value="TAXI">Taxi Service</option>
+                                                    <option value="BUS">Bus Service</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="capacity" class="form-label">Capacity</label>
+                                                <input type="number" class="form-control" id="capacity" th:field="*{capacity}" min="1" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="fromLocation" class="form-label">From Location</label>
+                                                <input type="text" class="form-control" id="fromLocation" th:field="*{fromLocation}" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="toLocation" class="form-label">To Location</label>
+                                                <input type="text" class="form-control" id="toLocation" th:field="*{toLocation}" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="price" class="form-label">Price (Rs.)</label>
+                                                <input type="number" class="form-control" id="price" th:field="*{price}" min="0" step="0.01" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="duration" class="form-label">Duration</label>
+                                                <input type="text" class="form-control" id="duration" th:field="*{duration}" placeholder="e.g., 30 minutes, 2 hours">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="imageUrl" class="form-label">Image URL</label>
+                                        <input type="url" class="form-control" id="imageUrl" th:field="*{imageUrl}">
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="active" th:field="*{active}">
+                                            <label class="form-check-label" for="active">
+                                                Active
+                                            </label>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="d-flex gap-2">
+                                        <button type="submit" class="btn btn-gold">
+                                            <i class="fas fa-save me-2"></i>
+                                            <span th:text="${transportation.id != null ? 'Update Transportation' : 'Create Transportation'}">Save Transportation</span>
+                                        </button>
+                                        <a href="/admin/transportations" class="btn btn-outline-secondary">Cancel</a>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
