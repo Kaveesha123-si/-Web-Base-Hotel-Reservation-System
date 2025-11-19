@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Confirmation - SAM Hotel</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .hero-section {
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');
+            background-size: cover;
+            background-position: center;
+            height: 50vh;
+            display: flex;
+            align-items: center;
+            color: white;
+        }
+        
+        .confirmation-card {
+            border: none;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-radius: 1rem;
+        }
+        
+        .success-icon {
+            font-size: 4rem;
+            color: #28a745;
+        }
+        
+        .booking-details {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 1rem;
+            padding: 2rem;
+        }
+        
+        .btn-gold {
+            background: linear-gradient(45deg, #d4af37, #f4d03f);
+            border: none;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .btn-gold:hover {
+            background: linear-gradient(45deg, #b8941f, #d4af37);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-hotel me-2"></i>SAM Hotel
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/booking/my-bookings">My Bookings</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <h1 class="display-4 fw-bold mb-4">Booking Confirmed!</h1>
+                    <p class="lead mb-4">Your reservation has been successfully created</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Confirmation Section -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="card confirmation-card text-center">
+                        <div class="card-body p-5">
+                            <div class="success-icon mb-4">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <h2 class="text-success mb-3">Booking Confirmed!</h2>
+                            <p class="lead mb-4">Thank you for choosing SAM Hotel. Your booking has been successfully created.</p>
+                            
+                            <div class="booking-details mb-4">
+                                <h4 class="mb-3">
+                                    <i class="fas fa-receipt me-2"></i>
+                                    Booking Details
+                                </h4>
+                                
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <strong>Booking ID:</strong><br>
+                                        <span th:text="${booking.id}">#12345</span>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <strong>Status:</strong><br>
+                                        <span class="badge bg-success" th:text="${booking.status.displayName}">Confirmed</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <strong>Check-in Date:</strong><br>
+                                        <span th:text="${#temporals.format(booking.checkInDate, 'dd MMMM yyyy')}">01 January 2024</span>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <strong>Check-out Date:</strong><br>
+                                        <span th:text="${#temporals.format(booking.checkOutDate, 'dd MMMM yyyy')}">03 January 2024</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <strong>Number of Guests:</strong><br>
+                                        <span th:text="${booking.numberOfGuests}">2</span>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <strong>Total Amount:</strong><br>
+                                        <span class="h5" th:text="'Rs. ' + ${booking.totalAmount}">Rs. 5,000</span>
+                                    </div>
+                                </div>
+                                
+                                <!-- Package Details -->
+                                <div th:if="${booking.packageEntity}" class="mt-3">
+                                    <hr>
+                                    <h5><i class="fas fa-box me-2"></i>Package Details</h5>
+                                    <p><strong th:text="${booking.packageEntity.name}">Package Name</strong></p>
+                                    <p th:text="${booking.packageEntity.description}">Package description</p>
+                                </div>
+                                
+                                <!-- Room Details -->
+                                <div th:if="${booking.room}" class="mt-3">
+                                    <hr>
+                                    <h5><i class="fas fa-bed me-2"></i>Room Details</h5>
+                                    <p><strong th:text="${booking.room.roomType}">Room Type</strong></p>
+                                    <p th:text="${booking.room.description}">Room description</p>
+                                </div>
+                                
+                                <!-- Offer Details -->
+                                <div th:if="${booking.offer}" class="mt-3">
+                                    <hr>
+                                    <h5><i class="fas fa-percentage me-2"></i>Special Offer Applied</h5>
+                                    <p><strong th:text="${booking.offer.title}">Offer Title</strong></p>
+                                    <p th:text="${booking.offer.description}">Offer description</p>
+                                    <span class="badge bg-warning" th:text="'Save ' + ${booking.offer.discountPercentage} + '%'">Save 0%</span>
+                                </div>
+                                
+                                <!-- Special Requests -->
+                                <div th:if="${booking.specialRequests}" class="mt-3">
+                                    <hr>
+                                    <h5><i class="fas fa-comment me-2"></i>Special Requests</h5>
+                                    <p th:text="${booking.specialRequests}">Special requests</p>
+                                </div>
+                            </div>
+                            
+                            <div class="alert alert-info">
+                                <h6><i class="fas fa-info-circle me-2"></i>Important Information</h6>
+                                <ul class="list-unstyled mb-0 text-start">
+                                    <li><i class="fas fa-check text-success me-2"></i>A confirmation email has been sent to your registered email address</li>
+                                    <li><i class="fas fa-check text-success me-2"></i>Please arrive at the hotel reception for check-in</li>
+                                    <li><i class="fas fa-check text-success me-2"></i>Free cancellation available up to 24 hours before check-in</li>
+                                    <li><i class="fas fa-check text-success me-2"></i>Contact us at +94 11 234 5678 for any queries</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-center mt-4">
+                                <a href="/booking/my-bookings" class="btn btn-gold me-md-2">
+                                    <i class="fas fa-list me-2"></i>View My Bookings
+                                </a>
+                                <a href="/" class="btn btn-outline-primary">
+                                    <i class="fas fa-home me-2"></i>Back to Home
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5><i class="fas fa-hotel me-2"></i>SAM Hotel</h5>
+                    <p>Experience luxury and comfort in the heart of Sri Lanka.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p>&copy; 2024 SAM Hotel. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
